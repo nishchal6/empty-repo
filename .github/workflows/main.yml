@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Change this to the branch you want to trigger the deployment
+      - main  # Trigger the workflow on pushes to the `main` branch
 
 jobs:
   deploy:
@@ -21,7 +21,7 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /path/to/your/deployment/directory || exit
+          cd /root/.ssh/empty-repo || exit
           git pull origin main || exit
           npm install || exit
           npm run build || exit
