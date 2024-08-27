@@ -1,18 +1,29 @@
-name: CI Pipeline
+name: Deploy to EC2
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the deployment
 
 jobs:
-  check:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Verify project files
-        run: |
-          echo "Checking for project files..."
-          ls -al # List files to ensure they're present
-          echo "Checking for HTML, CSS, and JS files..."
-          find . -name "*.html" -o -name "*.css" -o -name "*.js" || exit 1
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+          cd /path/to/your/deployment/directory || exit
+          git pull origin main || exit
+          npm install || exit
+          npm run build || exit
+          # Add any additional deployment commands here
+        EOF
