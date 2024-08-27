@@ -1,0 +1,18 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Verify project files
+        run: |
+          echo "Checking for project files..."
+          ls -al # List files to ensure they're present
+          echo "Checking for HTML, CSS, and JS files..."
+          find . -name "*.html" -o -name "*.css" -o -name "*.js" || exit 1
