@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Navigate to the application directory
-cd /var/www/html/my-react-app
+cd /home/ubuntu/empty-repo
 
-# Start the application
-npm start
+# Start the applicatio
+pm2 start npm --name "app" -- start
 
